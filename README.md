@@ -62,6 +62,7 @@ git clone <url of this repository> .
 * Change the current directory to the sourcecode directory. For example: cd C:\CBC\src
 * if environment is not yet created, create environment using command:
 ```
+cd src
 python -m venv venv
 ```
 * Then activate the environment using:
