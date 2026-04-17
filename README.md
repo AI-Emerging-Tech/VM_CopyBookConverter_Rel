@@ -48,7 +48,8 @@ In general, most of the mainframe systems use transactional data in IBM EBCDIC f
 * Open windows CMD, change directory to project directory. For example: cd C:\CBC
 * Clone the project repository to project directory using the command:
 ```
-git clone <url of this repository>
+git clone <url of this repository> .
+(note the . at the end. Use it if you want to clone the content without parent directory VM_CopyBookConverter_Rel)
 ```
 
 ### Installing python
