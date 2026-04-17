@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="HO3-POLICY-RECORD">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="POLICY-HEADER">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="POLICY-NUMBER" type="xsd:string"/>
+              
+
+              <xsd:element name="INSURED-NAME" type="xsd:string"/>
+              
+
+              <xsd:element name="EFFECTIVE-DATE" type="xsd:string"/>
+              
+
+              <xsd:element name="EXPIRY-DATE" type="xsd:string"/>
+              
+
+              <xsd:element name="STATE-CODE" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        
+
+        <xsd:element name="POLICY-COVERAGES">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="COV-A-DWELLING" type="xsd:string"/>
+              
+
+              <xsd:element name="COV-C-CONTENTS" type="xsd:string"/>
+              
+
+              <xsd:element name="COV-E-LIABILITY" type="xsd:string"/>
+              
+
+              <xsd:element name="ALL-PERIL-DEDUCTIBLE" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        
+
+        <xsd:element name="MORTGAGEE-INFO">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="MORTGAGEE-NAME" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        
+
+        <xsd:element name="PROPERTY-COUNT" type="xsd:string"/>
+        
+
+        <xsd:element name="PROPERTY-DETAILS" minOccurs="0" maxOccurs="3">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="PROPERTY-SEQ-NO" type="xsd:string"/>
+              
+
+              <xsd:element name="YEAR-BUILT" type="xsd:string"/>
+              
+
+              <xsd:element name="OCCUPANCY-TYPE" type="xsd:string"/>
+              
+
+              <xsd:element name="ROOF-TYPE" type="xsd:string"/>
+              
+
+              <xsd:element name="PROPERTY-ADDRESS" type="xsd:string"/>
+              
+
+              <xsd:element name="PROPERTY-CITY" type="xsd:string"/>
+              
+
+              <xsd:element name="PROPERTY-ZIP" type="xsd:string"/>
+              
+
+              <xsd:element name="PROPERTY-INSURED-VALUE" type="xsd:string"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
