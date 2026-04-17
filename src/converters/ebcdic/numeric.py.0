@@ -1,0 +1,88 @@
+# numeric.py - Encode/decode COBOL numeric types (COMP-3, COMP, DISPLAY)
+from decimal import Decimal, getcontext
+
+def decode_comp3(raw: bytes, digits: int, scale: int) -> str:
+    if not raw:
+        return f"0.{('0'*scale)}" if scale else "0"
+
+    hexstr = raw.hex().upper()
+    sign_nibble = hexstr[-1]
+    digit_str = hexstr[:-1]
+
+    sign = -1 if sign_nibble in ("D", "B") else 1
+    number = int(digit_str) * sign
+
+    if scale:
+        value = Decimal(number) / (Decimal(10) ** scale)
+        # force fixed decimals
+        return f"{value:.{scale}f}"
+    else:
+        return str(number)
+
+def decode_comp(raw: bytes, scale: int) -> str:
+    value = int.from_bytes(raw, byteorder="big", signed=True)
+
+    if scale:
+        d = Decimal(value) / (Decimal(10) ** scale)
+        return f"{d:.{scale}f}"
+
+    return str(value)
+
+def encode_comp3(value, digits: int, scale: int) -> bytes:
+    """
+    Encode COBOL COMP-3 packed decimal.
+
+    digits = total digits (integer+fraction) excluding sign
+    scale  = number of fraction digits
+    """
+    if value in ("", None):
+        value = 0
+
+    scaled = int(round(float(value) * (10 ** scale)))
+    sign_nibble = "C" if scaled >= 0 else "D"
+
+    digit_str = f"{abs(scaled):0{digits}d}"
+
+    # correct rule: append sign nibble (do NOT replace last digit)
+    packed_nibbles = digit_str + sign_nibble
+
+    # if odd number of nibbles → pad leading 0
+    if len(packed_nibbles) % 2 == 1:
+        packed_nibbles = "0" + packed_nibbles
+
+    return bytes.fromhex(packed_nibbles)
+
+def encode_comp(value, length: int, scale: int = 0) -> bytes:
+    """
+    Encode COBOL COMP (binary).
+    Length is 2/4/8 bytes depending on PIC digits.
+    """
+    if value in ("", None):
+        value = 0
+
+    # scale handling (eg PIC 9(5)V99 COMP) - rarely used but possible
+    v = float(value)
+    scaled = int(round(v * (10 ** scale)))
+
+    return int(scaled).to_bytes(length, byteorder="big", signed=True)
+
+
+
+def encode_display_numeric(value, length, scale=0):
+    """
+    Encode PIC 9(n)V9(m) DISPLAY numeric.
+    Example: 550000.00 -> '055000000'
+    """
+    if value in ("", None):
+        return b"\x40" * length  # spaces
+
+    value = float(value)
+    scaled = int(round(value * (10 ** scale)))
+    fmt = f"{{:0{length}d}}"
+    text = fmt.format(scaled)
+    return text.encode("cp037")
+
+if __name__ == "__main__":
+    raw = encode_comp3("550000.00", digits=9, scale=2)
+    print(raw.hex())
+    print(decode_comp3(raw, digits=9, scale=2))
